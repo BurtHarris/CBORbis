@@ -92,20 +92,20 @@ Table of Contents
          2.4.4.1.  Encoded CBOR Data Item  . . . . . . . . . . . . .  18
          2.4.4.2.  Expected Later Encoding for CBOR-to-JSON
                    Converters  . . . . . . . . . . . . . . . . . . .  18
-         2.4.4.3.  Encoded Text  . . . . . . . . . . . . . . . . . .  18
+         2.4.4.3.  Encoded Text  . . . . . . . . . . . . . . . . . .  19
        2.4.5.  Self-Describe CBOR  . . . . . . . . . . . . . . . . .  19
-   3.  Creating CBOR-Based Protocols . . . . . . . . . . . . . . . .  19
+   3.  Creating CBOR-Based Protocols . . . . . . . . . . . . . . . .  20
      3.1.  CBOR in Streaming Applications  . . . . . . . . . . . . .  20
-     3.2.  Generic Encoders and Decoders . . . . . . . . . . . . . .  20
+     3.2.  Generic Encoders and Decoders . . . . . . . . . . . . . .  21
      3.3.  Syntax Errors . . . . . . . . . . . . . . . . . . . . . .  21
        3.3.1.  Incomplete CBOR Data Items  . . . . . . . . . . . . .  21
        3.3.2.  Malformed Indefinite-Length Items . . . . . . . . . .  22
        3.3.3.  Unknown Additional Information Values . . . . . . . .  22
      3.4.  Other Decoding Errors . . . . . . . . . . . . . . . . . .  22
      3.5.  Handling Unknown Simple Values and Tags . . . . . . . . .  23
-     3.6.  Numbers . . . . . . . . . . . . . . . . . . . . . . . . .  23
-     3.7.  Specifying Keys for Maps  . . . . . . . . . . . . . . . .  24
-     3.8.  Undefined Values  . . . . . . . . . . . . . . . . . . . .  25
+     3.6.  Numbers . . . . . . . . . . . . . . . . . . . . . . . . .  24
+     3.7.  Specifying Keys for Maps  . . . . . . . . . . . . . . . .  25
+     3.8.  Undefined Values  . . . . . . . . . . . . . . . . . . . .  26
 
 
 
@@ -116,17 +116,17 @@ Internet-Draft                    CBOR                      October 2017
 
      3.9.  Canonical CBOR  . . . . . . . . . . . . . . . . . . . . .  26
      3.10. Strict Mode . . . . . . . . . . . . . . . . . . . . . . .  27
-   4.  Converting Data between CBOR and JSON . . . . . . . . . . . .  28
+   4.  Converting Data between CBOR and JSON . . . . . . . . . . . .  29
      4.1.  Converting from CBOR to JSON  . . . . . . . . . . . . . .  29
      4.2.  Converting from JSON to CBOR  . . . . . . . . . . . . . .  30
    5.  Future Evolution of CBOR  . . . . . . . . . . . . . . . . . .  31
      5.1.  Extension Points  . . . . . . . . . . . . . . . . . . . .  31
      5.2.  Curating the Additional Information Space . . . . . . . .  32
-   6.  Diagnostic Notation . . . . . . . . . . . . . . . . . . . . .  32
-     6.1.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  33
+   6.  Diagnostic Notation . . . . . . . . . . . . . . . . . . . . .  33
+     6.1.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  34
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  34
      7.1.  Simple Values Registry  . . . . . . . . . . . . . . . . .  34
-     7.2.  Tags Registry . . . . . . . . . . . . . . . . . . . . . .  34
+     7.2.  Tags Registry . . . . . . . . . . . . . . . . . . . . . .  35
      7.3.  Media Type ("MIME Type")  . . . . . . . . . . . . . . . .  35
      7.4.  CoAP Content-Format . . . . . . . . . . . . . . . . . . .  36
      7.5.  The +cbor Structured Syntax Suffix Registration . . . . .  36
@@ -735,6 +735,12 @@ Internet-Draft                    CBOR                      October 2017
    are encoded in the additional bytes of the appropriate size.  (See
    Appendix D for some information about 16-bit floating point.)
 
+   An encoder MUST NOT encode False as the two-byte sequence of 0xf814,
+   MUST NOT encode True as the two-byte sequence of 0xf815, MUST NOT
+   encode Null as the two-byte sequence of 0xf816, and MUST NOT encode
+   Undefined value as the two-byte sequence of 0xf817.  A decoder MUST
+   treat these two-byte sequences as an error.
+
 2.4.  Optional Tagging of Items
 
    In CBOR, a data item can optionally be preceded by a tag to give it
@@ -772,12 +778,6 @@ Internet-Draft                    CBOR                      October 2017
    value.  The content of the tagged item is the data item (the value)
    that is being tagged.
 
-   IANA maintains a registry of tag values as described in Section 7.2.
-   Table 3 provides a list of initial values, with definitions in the
-   rest of this section.
-
-   +-----------+--------------+----------------------------------------+
-   | Tag       | Data Item    | Semantics                              |
 
 
 
@@ -786,6 +786,12 @@ Bormann & Hoffman        Expires April 16, 2018                [Page 14]
 Internet-Draft                    CBOR                      October 2017
 
 
+   IANA maintains a registry of tag values as described in Section 7.2.
+   Table 3 provides a list of initial values, with definitions in the
+   rest of this section.
+
+   +-----------+--------------+----------------------------------------+
+   | Tag       | Data Item    | Semantics                              |
    +-----------+--------------+----------------------------------------+
    | 0         | UTF-8 string | Standard date/time string; see Section |
    |           |              | 2.4.1                                  |
@@ -828,12 +834,6 @@ Internet-Draft                    CBOR                      October 2017
    |           |              |                                        |
    | 36        | UTF-8 string | MIME message; see Section 2.4.4.3      |
    |           |              |                                        |
-   | 37..55798 | (Unassigned) | (Unassigned)                           |
-   |           |              |                                        |
-   | 55799     | multiple     | Self-describe CBOR; see Section 2.4.5  |
-   |           |              |                                        |
-   | 55800+    | (Unassigned) | (Unassigned)                           |
-   +-----------+--------------+----------------------------------------+
 
 
 
@@ -841,6 +841,13 @@ Bormann & Hoffman        Expires April 16, 2018                [Page 15]
 
 Internet-Draft                    CBOR                      October 2017
 
+
+   | 37..55798 | (Unassigned) | (Unassigned)                           |
+   |           |              |                                        |
+   | 55799     | multiple     | Self-describe CBOR; see Section 2.4.5  |
+   |           |              |                                        |
+   | 55800+    | (Unassigned) | (Unassigned)                           |
+   +-----------+--------------+----------------------------------------+
 
                          Table 3: Values for Tags
 
@@ -883,13 +890,6 @@ Internet-Draft                    CBOR                      October 2017
    Decimal fractions combine an integer mantissa with a base-10 scaling
    factor.  They are most useful if an application needs the exact
    representation of a decimal fraction such as 1.1 because there is no
-   exact representation for many decimal fractions in binary floating
-   point.
-
-   Bigfloats combine an integer mantissa with a base-2 scaling factor.
-   They are binary floating-point values that can exceed the range or
-   the precision of the three IEEE 754 formats supported by CBOR
-   (Section 2.3).  Bigfloats may also be used by constrained
 
 
 
@@ -898,6 +898,13 @@ Bormann & Hoffman        Expires April 16, 2018                [Page 16]
 Internet-Draft                    CBOR                      October 2017
 
 
+   exact representation for many decimal fractions in binary floating
+   point.
+
+   Bigfloats combine an integer mantissa with a base-2 scaling factor.
+   They are binary floating-point values that can exceed the range or
+   the precision of the three IEEE 754 formats supported by CBOR
+   (Section 2.3).  Bigfloats may also be used by constrained
    applications that need some basic binary floating-point capability
    without the need for supporting IEEE 754.
 
@@ -938,13 +945,6 @@ Internet-Draft                    CBOR                      October 2017
          20       -- -1
          03       -- 3
 
-   Decimal fractions and bigfloats provide no representation of
-   Infinity, -Infinity, or NaN; if these are needed in place of a
-   decimal fraction or bigfloat, the IEEE 754 half-precision
-   representations from Section 2.3 can be used.  For constrained
-   applications, where there is a choice between representing a specific
-   number as an integer and as a decimal fraction or bigfloat (such as
-   when the exponent is small and non-negative), there is a quality-of-
 
 
 
@@ -954,6 +954,13 @@ Bormann & Hoffman        Expires April 16, 2018                [Page 17]
 Internet-Draft                    CBOR                      October 2017
 
 
+   Decimal fractions and bigfloats provide no representation of
+   Infinity, -Infinity, or NaN; if these are needed in place of a
+   decimal fraction or bigfloat, the IEEE 754 half-precision
+   representations from Section 2.3 can be used.  For constrained
+   applications, where there is a choice between representing a specific
+   number as an integer and as a decimal fraction or bigfloat (such as
+   when the exponent is small and non-negative), there is a quality-of-
    implementation expectation that the integer representation is used
    directly.
 
@@ -994,6 +1001,15 @@ Internet-Draft                    CBOR                      October 2017
    tags might be defined for other data encodings of RFC 4648 or for
    other ways to encode binary data in strings.
 
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 18]
+
+Internet-Draft                    CBOR                      October 2017
+
+
 2.4.4.3.  Encoded Text
 
    Some text strings hold data that have formats widely used on the
@@ -1002,13 +1018,6 @@ Internet-Draft                    CBOR                      October 2017
    tags for some of these formats.
 
    o  Tag 32 is for URIs, as defined in [RFC3986];
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 18]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    o  Tags 33 and 34 are for base64url- and base64-encoded text strings,
       as defined in [RFC4648];
@@ -1050,21 +1059,19 @@ Internet-Draft                    CBOR                      October 2017
    tag the entire CBOR item with tag 55799, the serialization of which
    will never be found at the beginning of a JSON text.
 
-3.  Creating CBOR-Based Protocols
-
-   Data formats such as CBOR are often used in environments where there
-   is no format negotiation.  A specific design goal of CBOR is to not
-   need any included or assumed schema: a decoder can take a CBOR item
-   and decode it with no other knowledge.
-
-
-
 
 
 Bormann & Hoffman        Expires April 16, 2018                [Page 19]
 
 Internet-Draft                    CBOR                      October 2017
 
+
+3.  Creating CBOR-Based Protocols
+
+   Data formats such as CBOR are often used in environments where there
+   is no format negotiation.  A specific design goal of CBOR is to not
+   need any included or assumed schema: a decoder can take a CBOR item
+   and decode it with no other knowledge.
 
    Of course, in real-world implementations, the encoder and the decoder
    will have a shared view of what should be in a CBOR data item.  For
@@ -1106,14 +1113,7 @@ Internet-Draft                    CBOR                      October 2017
    indefinite-length encoding.  Using indefinite-length encoding allows
    an encoder to not need to marshal all the data for counting, but it
    requires a decoder to allocate increasing amounts of memory while
-   waiting for the end of the item.  This might be fine for some
-   applications but not others.
 
-3.2.  Generic Encoders and Decoders
-
-   A generic CBOR decoder can decode all well-formed CBOR data and
-   present them to an application.  CBOR data is well-formed if it uses
-   the initial bytes, as well as the byte strings and/or data items that
 
 
 
@@ -1122,6 +1122,14 @@ Bormann & Hoffman        Expires April 16, 2018                [Page 20]
 Internet-Draft                    CBOR                      October 2017
 
 
+   waiting for the end of the item.  This might be fine for some
+   applications but not others.
+
+3.2.  Generic Encoders and Decoders
+
+   A generic CBOR decoder can decode all well-formed CBOR data and
+   present them to an application.  CBOR data is well-formed if it uses
+   the initial bytes, as well as the byte strings and/or data items that
    are implied by their values, in the manner defined by CBOR, and no
    extraneous data follows (Appendix C).
 
@@ -1162,6 +1170,14 @@ Internet-Draft                    CBOR                      October 2017
    items enclosed in the data items.  If less data is available, this
    can be treated as a syntax error.  A decoder may also implement
    incremental parsing, that is, decode the data item as far as it is
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 21]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    available and present the data found so far (such as in an event-
    based interface), with the option of continuing the decoding once
    further data is available.
@@ -1170,13 +1186,6 @@ Internet-Draft                    CBOR                      October 2017
 
    o  A decoder expects a certain number of array or map entries but
       instead encounters the end of the data.
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 21]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    o  A decoder processes what it expects to be the last pair in a map
       and comes to the end of the data.
@@ -1217,6 +1226,14 @@ Internet-Draft                    CBOR                      October 2017
    A CBOR data item may be syntactically well-formed but present a
    problem with interpreting the data encoded in it in the CBOR data
    model.  Generally speaking, a decoder that finds a data item with
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 22]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    such a problem might issue a warning, might stop processing
    altogether, might handle the error and make the problematic value
    available to the application as such, or take some other type of
@@ -1226,14 +1243,6 @@ Internet-Draft                    CBOR                      October 2017
 
    Duplicate keys in a map:  Generic decoders (Section 3.2) make data
       available to applications using the native CBOR data model.  That
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 22]
-
-Internet-Draft                    CBOR                      October 2017
-
-
       data model includes maps (key-value mappings with unique keys),
       not multimaps (key-value mappings where multiple entries can have
       the same key).  Thus, a generic decoder that gets a CBOR map item
@@ -1273,6 +1282,14 @@ Internet-Draft                    CBOR                      October 2017
    might handle the error and present the unknown tag value together
    with the contained data item to the application (as is expected of
    generic decoders), might ignore the tag and simply present the
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 23]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    contained data item only to the application, or take some other type
    of action.
 
@@ -1282,14 +1299,6 @@ Internet-Draft                    CBOR                      October 2017
    for the same numeric value are equivalent.  This means that an
    encoder can encode a floating-point value of 0.0 as the integer 0.
    It, however, also means that an application that expects to find
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 23]
-
-Internet-Draft                    CBOR                      October 2017
-
-
    integer values only might find floating-point values if the encoder
    decides these are desirable, such as when the floating-point value is
    more compact than a 64-bit integer.
@@ -1327,6 +1336,16 @@ Internet-Draft                    CBOR                      October 2017
    bytes of 0x00) as long as the application can decode an integer of
    the given size.
 
+
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 24]
+
+Internet-Draft                    CBOR                      October 2017
+
+
 3.7.  Specifying Keys for Maps
 
    The encoding and decoding applications need to agree on what types of
@@ -1337,14 +1356,6 @@ Internet-Draft                    CBOR                      October 2017
    often leads to implementation errors.  In applications where keys are
    numeric in nature and numeric ordering of keys is important to the
    application, directly using the numbers for the keys is useful.
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 24]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    If multiple types of keys are to be used, consideration should be
    given to how these types would be represented in the specific
@@ -1383,6 +1394,14 @@ Internet-Draft                    CBOR                      October 2017
 
    Applications for constrained devices that have maps with 24 or fewer
    frequently used keys should consider using small integers (and those
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 25]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    with up to 48 frequently used keys should consider also using small
    negative integers) because the keys can then be encoded in a single
    byte.
@@ -1393,14 +1412,6 @@ Internet-Draft                    CBOR                      October 2017
    Undefined might be used by an encoder as a substitute for a data item
    with an encoding problem, in order to allow the rest of the enclosing
    data items to be encoded without harm.
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 25]
-
-Internet-Draft                    CBOR                      October 2017
-
 
 3.9.  Canonical CBOR
 
@@ -1438,6 +1449,15 @@ Internet-Draft                    CBOR                      October 2017
       data items without paying attention to the 3/5 bit splitting for
       major types.  (Note that this rule allows maps that have keys of
       different types, even though that is probably a bad practice that
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 26]
+
+Internet-Draft                    CBOR                      October 2017
+
+
       could lead to errors in some canonicalization implementations.)
       The sorting rules are:
 
@@ -1448,15 +1468,6 @@ Internet-Draft                    CBOR                      October 2017
          in (byte-wise) lexical order sorts earlier.
 
    o  Indefinite-length items must be made into definite-length items.
-
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 26]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    If a protocol allows for IEEE floats, then additional
    canonicalization rules might need to be added.  One example rule
@@ -1495,6 +1506,14 @@ Internet-Draft                    CBOR                      October 2017
    Generic decoders used in applications where this might be a problem
    need to support a strict mode in which it is also the responsibility
    of the receiver to reject ambiguously decodable data.  It is expected
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 27]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    that firewalls and other security systems that decode CBOR will only
    decode in strict mode.
 
@@ -1505,14 +1524,6 @@ Internet-Draft                    CBOR                      October 2017
    (Section 3.4).  In particular, a strict decoder needs to have an API
    that reports an error (and does not return data) for a CBOR data item
    that contains any of the following:
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 27]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    o  a map (major type 5) that has more than one entry with the same
       key
@@ -1550,6 +1561,15 @@ Internet-Draft                    CBOR                      October 2017
    limits its output to unambiguously decodable CBOR, independent of
    whether or not its application is providing API-conformant data.
 
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 28]
+
+Internet-Draft                    CBOR                      October 2017
+
+
 4.  Converting Data between CBOR and JSON
 
    This section gives non-normative advice about converting between CBOR
@@ -1559,16 +1579,6 @@ Internet-Draft                    CBOR                      October 2017
    It is worth noting that a JSON text is a sequence of characters, not
    an encoded sequence of bytes, while a CBOR data item consists of
    bytes, not characters.
-
-
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 28]
-
-Internet-Draft                    CBOR                      October 2017
-
 
 4.1.  Converting from CBOR to JSON
 
@@ -1607,6 +1617,15 @@ Internet-Draft                    CBOR                      October 2017
    o  Null (major type 7, additional information 22) becomes a JSON
       null.
 
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 29]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    o  A floating-point value (major type 7, additional information 25
       through 27) becomes a JSON number if it is finite (that is, it can
       be represented in a JSON number); if the value is non-finite (NaN,
@@ -1618,14 +1637,6 @@ Internet-Draft                    CBOR                      October 2017
 
    o  A bignum (major type 6, tag value 2 or 3) is represented by
       encoding its byte string in base64url without padding and becomes
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 29]
-
-Internet-Draft                    CBOR                      October 2017
-
-
       a JSON string.  For tag value 3 (negative bignum), a "~" (ASCII
       tilde) is inserted before the base-encoded value.  (The conversion
       to a binary blob instead of a number is to prevent a likely
@@ -1663,6 +1674,14 @@ Internet-Draft                    CBOR                      October 2017
       capable of efficiently finding the minimum form, though).  There
       may be an implementation-defined limit to the precision that will
       affect the precision of the represented values.  Decimal
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 30]
+
+Internet-Draft                    CBOR                      October 2017
+
+
       representation should only be used if that is specified in a
       protocol.
 
@@ -1674,14 +1693,6 @@ Internet-Draft                    CBOR                      October 2017
    escapes and longer (or much longer) than 255 bytes may expand when
    encoded as UTF-8 strings in CBOR.  Similarly, a few of the binary
    floating-point representations might cause expansion from some short
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 30]
-
-Internet-Draft                    CBOR                      October 2017
-
-
    decimal representations (1.1, 1e9) in JSON.  This may be hard to get
    right, and any ensuing vulnerabilities may be exploited by an
    attacker.
@@ -1719,6 +1730,14 @@ Internet-Draft                    CBOR                      October 2017
 
    Sizing the codepoint space may be difficult because the range
    required may be hard to predict.  An attempt should be made to make
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 31]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    the codepoint space large enough so that it can slowly be filled over
    the intended lifetime of the protocol.
 
@@ -1729,15 +1748,6 @@ Internet-Draft                    CBOR                      October 2017
       been allocated.  Implementations receiving an unknown simple data
       item may be able to process it as such, given that the structure
       of the value is indeed simple.  The IANA registry in Section 7.1
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 31]
-
-Internet-Draft                    CBOR                      October 2017
-
-
       is the appropriate way to address the extensibility of this
       codepoint space.
 
@@ -1775,6 +1785,15 @@ Internet-Draft                    CBOR                      October 2017
    there should be a very good reason for allocating it before assigning
    it through an update of this protocol.
 
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 32]
+
+Internet-Draft                    CBOR                      October 2017
+
+
 6.  Diagnostic Notation
 
    CBOR is a binary interchange format.  To facilitate documentation and
@@ -1786,14 +1805,6 @@ Internet-Draft                    CBOR                      October 2017
    Note that this truly is a diagnostic format; it is not meant to be
    parsed.  Therefore, no formal definition (as in ABNF) is given in
    this document.  (Implementers looking for a text-based format for
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 32]
-
-Internet-Draft                    CBOR                      October 2017
-
-
    representing CBOR data items in configuration files may also want to
    consider YAML [YAML].)
 
@@ -1829,6 +1840,16 @@ Internet-Draft                    CBOR                      October 2017
    integer in the parentheses.  For example, "simple(42)" indicates
    major type 7, value 42.
 
+
+
+
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 33]
+
+Internet-Draft                    CBOR                      October 2017
+
+
 6.1.  Encoding Indicators
 
    Sometimes it is useful to indicate in the diagnostic notation which
@@ -1841,14 +1862,6 @@ Internet-Draft                    CBOR                      October 2017
    underscore, is an encoding indicator, and can be ignored by anyone
    not interested in this information.  Encoding indicators are always
    optional.
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 33]
-
-Internet-Draft                    CBOR                      October 2017
-
 
    A single underscore can be written after the opening brace of a map
    or the opening bracket of an array to indicate that the data item was
@@ -1886,6 +1899,13 @@ Internet-Draft                    CBOR                      October 2017
    with the number 16 in order to reserve the lower numbers for
    contiguous blocks (if any).
 
+
+
+Bormann & Hoffman        Expires April 16, 2018                [Page 34]
+
+Internet-Draft                    CBOR                      October 2017
+
+
    New entries in the range 32 to 255 are assigned by Specification
    Required.
 
@@ -1897,15 +1917,6 @@ Internet-Draft                    CBOR                      October 2017
    New entries in the range 0 to 23 are assigned by Standards Action.
    New entries in the range 24 to 255 are assigned by Specification
    Required.  New entries in the range 256 to 18446744073709551615 are
-
-
-
-
-Bormann & Hoffman        Expires April 16, 2018                [Page 34]
-
-Internet-Draft                    CBOR                      October 2017
-
-
    assigned by First Come First Served.  The template for registration
    requests is:
 
@@ -1943,17 +1954,6 @@ Internet-Draft                    CBOR                      October 2017
 
    Applications that use this media type:  None yet, but it is expected
       that this format will be deployed in protocols and applications.
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -295,6 +295,7 @@ address {
 <link href="#rfc.section.2.4.4.2" rel="Chapter" title="2.4.4.2 Expected Later Encoding for CBOR-to-JSON Converters">
 <link href="#rfc.section.2.4.4.3" rel="Chapter" title="2.4.4.3 Encoded Text">
 <link href="#rfc.section.2.4.5" rel="Chapter" title="2.4.5 Self-Describe CBOR">
+<link href="#rfc.section.2.5" rel="Chapter" title="2.5 CBOR Data Models">
 <link href="#rfc.section.3" rel="Chapter" title="3 Creating CBOR-Based Protocols">
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 CBOR in Streaming Applications">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Generic Encoders and Decoders">
@@ -442,7 +443,9 @@ address {
 </li>
 </ul><li>2.4.5.   <a href="#rfc.section.2.4.5">Self-Describe CBOR</a>
 </li>
-</ul></ul><li>3.   <a href="#rfc.section.3">Creating CBOR-Based Protocols</a>
+</ul><li>2.5.   <a href="#rfc.section.2.5">CBOR Data Models</a>
+</li>
+</ul><li>3.   <a href="#rfc.section.3">Creating CBOR-Based Protocols</a>
 </li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">CBOR in Streaming Applications</a>
 </li>
@@ -1025,6 +1028,38 @@ C5             -- Tag 5
 <p id="rfc.section.2.4.5.p.2">Tag 55799 is defined for this purpose.  It does not impart any special semantics on the data item that follows; that is, the semantics of a data item tagged with tag 55799 is exactly identical to the semantics of the data item itself.</p>
 <p id="rfc.section.2.4.5.p.3">The serialization of this tag is 0xd9d9f7, which appears not to be in use as a distinguishing mark for frequently used file types.  In particular, it is not a valid start of a Unicode text in any Unicode encoding if followed by a valid CBOR data item.</p>
 <p id="rfc.section.2.4.5.p.4">For instance, a decoder might be able to parse both CBOR and JSON. Such a decoder would need to mechanically distinguish the two formats. An easy way for an encoder to help the decoder would be to tag the entire CBOR item with tag 55799, the serialization of which will never be found at the beginning of a JSON text.</p>
+<h1 id="rfc.section.2.5">
+<a href="#rfc.section.2.5">2.5.</a> <a href="#cbor-data-models" id="cbor-data-models">CBOR Data Models</a>
+</h1>
+<p id="rfc.section.2.5.p.1">CBOR is explicit about its generic data model, which defines the set of all data items that can be represented in CBOR.  Its basic generic data model is extensible by the registration of simple type values and tags.  Applications can then subset the resulting extended generic data model to build their specific data models.</p>
+<p id="rfc.section.2.5.p.2">Within environments that can represent the data items in the generic data model, generic CBOR encoders and decoders can be implemented (which usually involves defining additional implementation data types for those data items that do not already have a natural representation in the environment).  The ability to provide generic encoders and decoders is an explicit design goal of CBOR; however many applications will provide their own application-specific encoders and/or decoders.</p>
+<p id="rfc.section.2.5.p.3">In the basic (un-extended) generic data model, a data item is one of:</p>
+<p></p>
+
+<ul>
+<li>an integer in the range -2**64..2**64-1 inclusive</li>
+<li>a simple value, identified by a number between 0 and 255, but distinct from that number</li>
+<li>a floating point value, distinct from an integer, out of the set representable by IEEE 754 binary64 (including non-finites)</li>
+<li>a sequence of zero or more bytes (&#8220;byte string&#8221;)</li>
+<li>a sequence of zero or more Unicode code points (&#8220;text string&#8221;)</li>
+<li>a sequence of zero or more data items (&#8220;array&#8221;)</li>
+<li>a mapping (mathematical function) from zero or more data items (&#8220;keys&#8221;) each to a data item (&#8220;values&#8221;), (&#8220;map&#8221;)</li>
+<li>a tagged data item, comprising a tag (an integer in the range 0..2**64-1) and a value (a data item)</li>
+</ul>
+<p id="rfc.section.2.5.p.5">Note that integer and floating-point values are distinct in this model, even if they have the same numeric value.</p>
+<p id="rfc.section.2.5.p.6">This basic generic data model comes pre-extended by the registration of a number of simple values and tags right in this document, such as:</p>
+<p></p>
+
+<ul>
+<li>
+<samp>false</samp>, <samp>true</samp>, <samp>null</samp>, and <samp>undefined</samp> (simple values identified by 20..23)</li>
+<li>integer and floating point values with a larger range and precision than the above (tags 2 to 5)</li>
+<li>application data types such as a point in time or an RFC 3339 date/time string (tags 1, 0)</li>
+</ul>
+<p id="rfc.section.2.5.p.8">Further elements of the extended generic data model can be (and have been) defined via the IANA registries created for CBOR.  Even if such an extension is unknown to a generic encoder or decoder, data items using that extension can be passed to or from the application by representing them at the interface to the application within the basic generic data model, i.e., as generic values of a simple type or generic tagged items.</p>
+<p id="rfc.section.2.5.p.9">In other words, the basic generic data model is stable as defined in this document, while the extended generic data model expands by the registration of new simple values or tags, but never shrinks.</p>
+<p id="rfc.section.2.5.p.10">While there is a strong expectation that generic encoders and decoders can represent <samp>false</samp>, <samp>true</samp>, and <samp>null</samp> in the form appropriate for their programming environment, implementation of the data model extensions created by tags is truly optional and a matter of implementation quality.</p>
+<p id="rfc.section.2.5.p.11">A specific data model usually subsets the extended generic data model and assigns application semantics to the data items within this subset and its components.  When documenting such specific data models, where it is desired to specify the types of data items, it is preferred to identify the types by their names in the generic data model (&#8220;negative integer&#8221;, &#8220;array&#8221;) instead of by referring to aspects of their CBOR representation (&#8220;major type 1&#8221;, &#8220;major type 4&#8221;).</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#creating-cbor-based-protocols" id="creating-cbor-based-protocols">Creating CBOR-Based Protocols</a>
 </h1>

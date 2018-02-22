@@ -281,8 +281,8 @@ address {
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Objectives">
 <link href="#rfc.section.1.2" rel="Chapter" title="1.2 Terminology">
 <link href="#rfc.section.2" rel="Chapter" title="2 CBOR Data Models">
-<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Extended generic data models">
-<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Specific data models">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Extended Generic Data Models">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Specific Data Models">
 <link href="#rfc.section.3" rel="Chapter" title="3 Specification of the CBOR Encoding">
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Major Types">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Indefinite Lengths for Some Major Types">
@@ -420,9 +420,9 @@ address {
 </li>
 </ul><li>2.   <a href="#rfc.section.2">CBOR Data Models</a>
 </li>
-<ul><li>2.1.   <a href="#rfc.section.2.1">Extended generic data models</a>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Extended Generic Data Models</a>
 </li>
-<li>2.2.   <a href="#rfc.section.2.2">Specific data models</a>
+<li>2.2.   <a href="#rfc.section.2.2">Specific Data Models</a>
 </li>
 </ul><li>3.   <a href="#rfc.section.3">Specification of the CBOR Encoding</a>
 </li>
@@ -639,7 +639,7 @@ address {
 </ul>
 <p id="rfc.section.2.p.5">Note that integer and floating-point values are distinct in this model, even if they have the same numeric value.</p>
 <h1 id="rfc.section.2.1">
-<a href="#rfc.section.2.1">2.1.</a> <a href="#extended-generic-data-models" id="extended-generic-data-models">Extended generic data models</a>
+<a href="#rfc.section.2.1">2.1.</a> <a href="#extended-generic-data-models" id="extended-generic-data-models">Extended Generic Data Models</a>
 </h1>
 <p id="rfc.section.2.1.p.1">This basic generic data model comes pre-extended by the registration of a number of simple values and tags right in this document, such as:</p>
 <p></p>
@@ -654,7 +654,7 @@ address {
 <p id="rfc.section.2.1.p.4">In other words, the basic generic data model is stable as defined in this document, while the extended generic data model expands by the registration of new simple values or tags, but never shrinks.</p>
 <p id="rfc.section.2.1.p.5">While there is a strong expectation that generic encoders and decoders can represent <samp>false</samp>, <samp>true</samp>, and <samp>null</samp> in the form appropriate for their programming environment, implementation of the data model extensions created by tags is truly optional and a matter of implementation quality.</p>
 <h1 id="rfc.section.2.2">
-<a href="#rfc.section.2.2">2.2.</a> <a href="#specific-data-models" id="specific-data-models">Specific data models</a>
+<a href="#rfc.section.2.2">2.2.</a> <a href="#specific-data-models" id="specific-data-models">Specific Data Models</a>
 </h1>
 <p id="rfc.section.2.2.p.1">The specific data model for a CBOR-based protocol usually subsets the extended generic data model and assigns application semantics to the data items within this subset and its components.  When documenting such specific data models, where it is desired to specify the types of data items, it is preferred to identify the types by their names in the generic data model (&#8220;negative integer&#8221;, &#8220;array&#8221;) instead of by referring to aspects of their CBOR representation (&#8220;major type 1&#8221;, &#8220;major type 4&#8221;).</p>
 <p id="rfc.section.2.2.p.2">Specific data models can also specify that values of different types are equivalent for the purposes of map keys and encoder freedom. For example, in the generic data model, a valid map MAY have both <samp>0</samp> and <samp>0.0</samp> as keys, and an encoder MUST NOT encode <samp>0.0</samp> as an integer (major type 0, <a href="#majortypes" class="xref">Section 3.1</a>).  However, if a specific data model declares that floating point and integer representations of integral values are equivalent, map keys <samp>0</samp> and <samp>0.0</samp> would be considered duplicates and so invalid, and an encoder could encode integral-valued floats as integers or vice versa, perhaps to save encoded bytes.</p>

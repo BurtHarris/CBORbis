@@ -79,8 +79,8 @@ Table of Contents
      1.1.  Objectives  . . . . . . . . . . . . . . . . . . . . . . .   4
      1.2.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   5
    2.  CBOR Data Models  . . . . . . . . . . . . . . . . . . . . . .   7
-     2.1.  Extended generic data models  . . . . . . . . . . . . . .   7
-     2.2.  Specific data models  . . . . . . . . . . . . . . . . . .   8
+     2.1.  Extended Generic Data Models  . . . . . . . . . . . . . .   7
+     2.2.  Specific Data Models  . . . . . . . . . . . . . . . . . .   8
    3.  Specification of the CBOR Encoding  . . . . . . . . . . . . .   9
      3.1.  Major Types . . . . . . . . . . . . . . . . . . . . . . .   9
      3.2.  Indefinite Lengths for Some Major Types . . . . . . . . .  11
@@ -380,7 +380,7 @@ Internet-Draft                    CBOR                     February 2018
    Note that integer and floating-point values are distinct in this
    model, even if they have the same numeric value.
 
-2.1.  Extended generic data models
+2.1.  Extended Generic Data Models
 
    This basic generic data model comes pre-extended by the registration
    of a number of simple values and tags right in this document, such
@@ -420,7 +420,7 @@ Internet-Draft                    CBOR                     February 2018
    data model extensions created by tags is truly optional and a matter
    of implementation quality.
 
-2.2.  Specific data models
+2.2.  Specific Data Models
 
    The specific data model for a CBOR-based protocol usually subsets the
    extended generic data model and assigns application semantics to the

@@ -114,43 +114,44 @@ Bormann & Hoffman        Expires August 26, 2018                [Page 2]
 Internet-Draft                    CBOR                     February 2018
 
 
-     3.8.  Undefined Values  . . . . . . . . . . . . . . . . . . . .  27
+       3.7.1.  Equivalence of Keys . . . . . . . . . . . . . . . . .  27
+     3.8.  Undefined Values  . . . . . . . . . . . . . . . . . . . .  28
      3.9.  Canonical CBOR  . . . . . . . . . . . . . . . . . . . . .  28
-       3.9.1.  Length-first map key ordering . . . . . . . . . . . .  29
-     3.10. Strict Mode . . . . . . . . . . . . . . . . . . . . . . .  30
+       3.9.1.  Length-first map key ordering . . . . . . . . . . . .  30
+     3.10. Strict Mode . . . . . . . . . . . . . . . . . . . . . . .  31
    4.  Converting Data between CBOR and JSON . . . . . . . . . . . .  32
-     4.1.  Converting from CBOR to JSON  . . . . . . . . . . . . . .  32
-     4.2.  Converting from JSON to CBOR  . . . . . . . . . . . . . .  33
-   5.  Future Evolution of CBOR  . . . . . . . . . . . . . . . . . .  34
-     5.1.  Extension Points  . . . . . . . . . . . . . . . . . . . .  34
-     5.2.  Curating the Additional Information Space . . . . . . . .  35
+     4.1.  Converting from CBOR to JSON  . . . . . . . . . . . . . .  33
+     4.2.  Converting from JSON to CBOR  . . . . . . . . . . . . . .  34
+   5.  Future Evolution of CBOR  . . . . . . . . . . . . . . . . . .  35
+     5.1.  Extension Points  . . . . . . . . . . . . . . . . . . . .  35
+     5.2.  Curating the Additional Information Space . . . . . . . .  36
    6.  Diagnostic Notation . . . . . . . . . . . . . . . . . . . . .  36
      6.1.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  37
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  37
-     7.1.  Simple Values Registry  . . . . . . . . . . . . . . . . .  37
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  38
+     7.1.  Simple Values Registry  . . . . . . . . . . . . . . . . .  38
      7.2.  Tags Registry . . . . . . . . . . . . . . . . . . . . . .  38
-     7.3.  Media Type ("MIME Type")  . . . . . . . . . . . . . . . .  38
-     7.4.  CoAP Content-Format . . . . . . . . . . . . . . . . . . .  39
-     7.5.  The +cbor Structured Syntax Suffix Registration . . . . .  39
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  40
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  41
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  41
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  41
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  42
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  44
-   Appendix B.  Jump Table . . . . . . . . . . . . . . . . . . . . .  48
-   Appendix C.  Pseudocode . . . . . . . . . . . . . . . . . . . . .  51
-   Appendix D.  Half-Precision . . . . . . . . . . . . . . . . . . .  53
+     7.3.  Media Type ("MIME Type")  . . . . . . . . . . . . . . . .  39
+     7.4.  CoAP Content-Format . . . . . . . . . . . . . . . . . . .  40
+     7.5.  The +cbor Structured Syntax Suffix Registration . . . . .  40
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  41
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  42
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  42
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  42
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  43
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  45
+   Appendix B.  Jump Table . . . . . . . . . . . . . . . . . . . . .  49
+   Appendix C.  Pseudocode . . . . . . . . . . . . . . . . . . . . .  52
+   Appendix D.  Half-Precision . . . . . . . . . . . . . . . . . . .  54
    Appendix E.  Comparison of Other Binary Formats to CBOR's Design
-                Objectives . . . . . . . . . . . . . . . . . . . . .  54
-     E.1.  ASN.1 DER, BER, and PER . . . . . . . . . . . . . . . . .  55
-     E.2.  MessagePack . . . . . . . . . . . . . . . . . . . . . . .  55
-     E.3.  BSON  . . . . . . . . . . . . . . . . . . . . . . . . . .  56
-     E.4.  UBJSON  . . . . . . . . . . . . . . . . . . . . . . . . .  56
-     E.5.  MSDTP: RFC 713  . . . . . . . . . . . . . . . . . . . . .  56
-     E.6.  Conciseness on the Wire . . . . . . . . . . . . . . . . .  56
-   Appendix F.  Changes from RFC 7049  . . . . . . . . . . . . . . .  57
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  57
+                Objectives . . . . . . . . . . . . . . . . . . . . .  55
+     E.1.  ASN.1 DER, BER, and PER . . . . . . . . . . . . . . . . .  56
+     E.2.  MessagePack . . . . . . . . . . . . . . . . . . . . . . .  56
+     E.3.  BSON  . . . . . . . . . . . . . . . . . . . . . . . . . .  57
+     E.4.  UBJSON  . . . . . . . . . . . . . . . . . . . . . . . . .  57
+     E.5.  MSDTP: RFC 713  . . . . . . . . . . . . . . . . . . . . .  57
+     E.6.  Conciseness on the Wire . . . . . . . . . . . . . . . . .  57
+   Appendix F.  Changes from RFC 7049  . . . . . . . . . . . . . . .  58
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  58
 
 1.  Introduction
 
@@ -160,8 +161,7 @@ Internet-Draft                    CBOR                     February 2018
    generalized for arbitrary data.  In the IETF, probably the best-known
    formats in the latter category are ASN.1's BER and DER [ASN.1].
 
-   The format defined here follows some specific design goals that are
-   not well met by current formats.  The underlying data model is an
+
 
 
 
@@ -170,6 +170,8 @@ Bormann & Hoffman        Expires August 26, 2018                [Page 3]
 Internet-Draft                    CBOR                     February 2018
 
 
+   The format defined here follows some specific design goals that are
+   not well met by current formats.  The underlying data model is an
    extended version of the JSON data model [RFC7159].  It is important
    to note that this is not a proposal that the grammar in RFC 7159 be
    extended in general, since doing so would cause a significant
@@ -216,8 +218,6 @@ Internet-Draft                    CBOR                     February 2018
 
        *  Similar to JSON, encoded data should be self-describing so
           that a generic decoder can be written.
-
-
 
 
 
@@ -1495,15 +1495,15 @@ Internet-Draft                    CBOR                     February 2018
    negative integers) because the keys can then be encoded in a single
    byte.
 
-3.8.  Undefined Values
+3.7.1.  Equivalence of Keys
 
-   In some CBOR-based protocols, the simple value (Section 2.3) of
-   Undefined might be used by an encoder as a substitute for a data item
-   with an encoding problem, in order to allow the rest of the enclosing
-   data items to be encoded without harm.
+   This notion of equivalence must be used to determine whether keys in
+   maps are duplicates or distinct.
 
+   o  All numbers are compared by their numeric value.
 
-
+      *  Integer data items with the same value are equal regardless of
+         how many bytes are used to encode them.
 
 
 
@@ -1514,6 +1514,44 @@ Bormann & Hoffman        Expires August 26, 2018               [Page 27]
 Internet-Draft                    CBOR                     February 2018
 
 
+      *  Floating point data items with the same value are equal
+         regardless of how many bytes are used to encode them.
+
+      *  An integer value encoded as a floating point data item is
+         equivalent to the same value encoded as an integer
+
+   o  Byte strings and text strings are compared by their binary
+      content.
+
+      *  A different length encoding has no effect on equivalence.
+
+      *  A byte string is equal to a text string if they have the same
+         binary content.
+
+   o  Two arrays are equal if all their items are in the same order and
+      equal.
+
+   o  Two maps are equal if they have the same set of pairs regardless
+      of their order; pairs are equal if both the key and value are
+      equal.
+
+   o  Tags have no effect in determining equality of a data item, if two
+      items are equal then they are equal irrespective of any tags that
+      either or both may have.
+
+   o  Simple values are equal if they simply have the same value.
+
+   Nothing else is equal, a simple value 2 is not equivalent to an
+   integer 2 and an array cannot be equivalent to a map with the same
+   values and sequential integer keys.
+
+3.8.  Undefined Values
+
+   In some CBOR-based protocols, the simple value (Section 2.3) of
+   Undefined might be used by an encoder as a substitute for a data item
+   with an encoding problem, in order to allow the rest of the enclosing
+   data items to be encoded without harm.
+
 3.9.  Canonical CBOR
 
    Some protocols may want encoders to only emit CBOR in a particular
@@ -1522,6 +1560,15 @@ Internet-Draft                    CBOR                     February 2018
    what they mean by a canonical format and what encoders and decoders
    are expected to do.  This section defines a set of restrictions that
    can serve as the base of such a canonical format.
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 28]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    A CBOR encoding satisfies the "core canonicalization requirements" if
    it satisfies the following restrictions:
@@ -1562,14 +1609,6 @@ Internet-Draft                    CBOR                     February 2018
 
       7.  [-1], encoded as 0x8120.
 
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 28]
-
-Internet-Draft                    CBOR                     February 2018
-
-
       8.  false, encoded as 0xf4.
 
    o  Indefinite-length items MUST not appear.  They can be encoded as
@@ -1578,6 +1617,14 @@ Internet-Draft                    CBOR                     February 2018
    Protocols that include floating, big integer, or other complex values
    need to define extra requirements on their canonical encodings.  For
    example:
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 29]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    o  If a protocol includes a field that can express floating values
       (Section 2.3), the protocol's canonicalization needs to specify
@@ -1618,14 +1665,6 @@ Internet-Draft                    CBOR                     February 2018
    of this specification's "length-first core canonicalization
    requirements":
 
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 29]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    A CBOR encoding satisfies the "length-first core canonicalization
    requirements" if it satisfies the core canonicalization requirements
    except that the keys in every map MUST be sorted such that:
@@ -1635,6 +1674,13 @@ Internet-Draft                    CBOR                     February 2018
 
    2.  If two keys have the same length, the one with the lower value in
        (byte-wise) lexical order sorts earlier.
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 30]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    For example, under the length-first core canonicalization
    requirements, the following keys are sorted correctly:
@@ -1675,13 +1721,6 @@ Internet-Draft                    CBOR                     February 2018
    that firewalls and other security systems that decode CBOR will only
    decode in strict mode.
 
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 30]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    A decoder in strict mode will reliably reject any data that could be
    interpreted by other decoders in different ways.  It will reliably
    reject data items with syntax errors (Section 3.3).  It will also
@@ -1689,6 +1728,15 @@ Internet-Draft                    CBOR                     February 2018
    (Section 3.4).  In particular, a strict decoder needs to have an API
    that reports an error (and does not return data) for a CBOR data item
    that contains any of the following:
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 31]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    o  a map (major type 5) that has more than one entry with the same
       key
@@ -1726,18 +1774,6 @@ Internet-Draft                    CBOR                     February 2018
    limits its output to unambiguously decodable CBOR, independent of
    whether or not its application is providing API-conformant data.
 
-
-
-
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 31]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 4.  Converting Data between CBOR and JSON
 
    This section gives non-normative advice about converting between CBOR
@@ -1747,6 +1783,16 @@ Internet-Draft                    CBOR                     February 2018
    It is worth noting that a JSON text is a sequence of characters, not
    an encoded sequence of bytes, while a CBOR data item consists of
    bytes, not characters.
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 32]
+
+Internet-Draft                    CBOR                     February 2018
+
 
 4.1.  Converting from CBOR to JSON
 
@@ -1785,15 +1831,6 @@ Internet-Draft                    CBOR                     February 2018
    o  Null (major type 7, additional information 22) becomes a JSON
       null.
 
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 32]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    o  A floating-point value (major type 7, additional information 25
       through 27) becomes a JSON number if it is finite (that is, it can
       be represented in a JSON number); if the value is non-finite (NaN,
@@ -1805,6 +1842,14 @@ Internet-Draft                    CBOR                     February 2018
 
    o  A bignum (major type 6, tag value 2 or 3) is represented by
       encoding its byte string in base64url without padding and becomes
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 33]
+
+Internet-Draft                    CBOR                     February 2018
+
+
       a JSON string.  For tag value 3 (negative bignum), a "~" (ASCII
       tilde) is inserted before the base-encoded value.  (The conversion
       to a binary blob instead of a number is to prevent a likely
@@ -1842,14 +1887,6 @@ Internet-Draft                    CBOR                     February 2018
       capable of efficiently finding the minimum form, though).  There
       may be an implementation-defined limit to the precision that will
       affect the precision of the represented values.  Decimal
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 33]
-
-Internet-Draft                    CBOR                     February 2018
-
-
       representation should only be used if that is specified in a
       protocol.
 
@@ -1861,6 +1898,14 @@ Internet-Draft                    CBOR                     February 2018
    escapes and longer (or much longer) than 255 bytes may expand when
    encoded as UTF-8 strings in CBOR.  Similarly, a few of the binary
    floating-point representations might cause expansion from some short
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 34]
+
+Internet-Draft                    CBOR                     February 2018
+
+
    decimal representations (1.1, 1e9) in JSON.  This may be hard to get
    right, and any ensuing vulnerabilities may be exploited by an
    attacker.
@@ -1898,14 +1943,6 @@ Internet-Draft                    CBOR                     February 2018
 
    Sizing the codepoint space may be difficult because the range
    required may be hard to predict.  An attempt should be made to make
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 34]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    the codepoint space large enough so that it can slowly be filled over
    the intended lifetime of the protocol.
 
@@ -1916,6 +1953,15 @@ Internet-Draft                    CBOR                     February 2018
       been allocated.  Implementations receiving an unknown simple data
       item may be able to process it as such, given that the structure
       of the value is indeed simple.  The IANA registry in Section 7.1
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 35]
+
+Internet-Draft                    CBOR                     February 2018
+
+
       is the appropriate way to address the extensibility of this
       codepoint space.
 
@@ -1953,15 +1999,6 @@ Internet-Draft                    CBOR                     February 2018
    there should be a very good reason for allocating it before assigning
    it through an update of this protocol.
 
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 35]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 6.  Diagnostic Notation
 
    CBOR is a binary interchange format.  To facilitate documentation and
@@ -1973,6 +2010,14 @@ Internet-Draft                    CBOR                     February 2018
    Note that this truly is a diagnostic format; it is not meant to be
    parsed.  Therefore, no formal definition (as in ABNF) is given in
    this document.  (Implementers looking for a text-based format for
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 36]
+
+Internet-Draft                    CBOR                     February 2018
+
+
    representing CBOR data items in configuration files may also want to
    consider YAML [YAML].)
 
@@ -2008,16 +2053,6 @@ Internet-Draft                    CBOR                     February 2018
    integer in the parentheses.  For example, "simple(42)" indicates
    major type 7, value 42.
 
-
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 36]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 6.1.  Encoding Indicators
 
    Sometimes it is useful to indicate in the diagnostic notation which
@@ -2030,6 +2065,14 @@ Internet-Draft                    CBOR                     February 2018
    underscore, is an encoding indicator, and can be ignored by anyone
    not interested in this information.  Encoding indicators are always
    optional.
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 37]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    A single underscore can be written after the opening brace of a map
    or the opening bracket of an array to indicate that the data item was
@@ -2067,13 +2110,6 @@ Internet-Draft                    CBOR                     February 2018
    with the number 16 in order to reserve the lower numbers for
    contiguous blocks (if any).
 
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 37]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    New entries in the range 32 to 255 are assigned by Specification
    Required.
 
@@ -2085,6 +2121,15 @@ Internet-Draft                    CBOR                     February 2018
    New entries in the range 0 to 23 are assigned by Standards Action.
    New entries in the range 24 to 255 are assigned by Specification
    Required.  New entries in the range 256 to 18446744073709551615 are
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 38]
+
+Internet-Draft                    CBOR                     February 2018
+
+
    assigned by First Come First Served.  The template for registration
    requests is:
 
@@ -2125,7 +2170,18 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 38]
+
+
+
+
+
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 39]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2181,7 +2237,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 39]
+Bormann & Hoffman        Expires August 26, 2018               [Page 40]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2237,7 +2293,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 40]
+Bormann & Hoffman        Expires August 26, 2018               [Page 41]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2293,7 +2349,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 41]
+Bormann & Hoffman        Expires August 26, 2018               [Page 42]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2349,7 +2405,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 42]
+Bormann & Hoffman        Expires August 26, 2018               [Page 43]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2405,7 +2461,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 43]
+Bormann & Hoffman        Expires August 26, 2018               [Page 44]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2461,7 +2517,7 @@ Appendix A.  Examples
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 44]
+Bormann & Hoffman        Expires August 26, 2018               [Page 45]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2517,7 +2573,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 45]
+Bormann & Hoffman        Expires August 26, 2018               [Page 46]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2573,7 +2629,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 46]
+Bormann & Hoffman        Expires August 26, 2018               [Page 47]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2629,7 +2685,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 47]
+Bormann & Hoffman        Expires August 26, 2018               [Page 48]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2685,7 +2741,7 @@ Appendix B.  Jump Table
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 48]
+Bormann & Hoffman        Expires August 26, 2018               [Page 49]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2741,7 +2797,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 49]
+Bormann & Hoffman        Expires August 26, 2018               [Page 50]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2797,7 +2853,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 50]
+Bormann & Hoffman        Expires August 26, 2018               [Page 51]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2853,7 +2909,7 @@ Appendix C.  Pseudocode
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 51]
+Bormann & Hoffman        Expires August 26, 2018               [Page 52]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2909,7 +2965,7 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 52]
+Bormann & Hoffman        Expires August 26, 2018               [Page 53]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -2965,7 +3021,7 @@ Appendix D.  Half-Precision
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 53]
+Bormann & Hoffman        Expires August 26, 2018               [Page 54]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -3021,7 +3077,7 @@ Appendix E.  Comparison of Other Binary Formats to CBOR's Design
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 54]
+Bormann & Hoffman        Expires August 26, 2018               [Page 55]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -3077,7 +3133,7 @@ E.2.  MessagePack
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 55]
+Bormann & Hoffman        Expires August 26, 2018               [Page 56]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -3133,7 +3189,7 @@ E.6.  Conciseness on the Wire
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 56]
+Bormann & Hoffman        Expires August 26, 2018               [Page 57]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -3189,7 +3245,7 @@ Authors' Addresses
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 57]
+Bormann & Hoffman        Expires August 26, 2018               [Page 58]
 
 Internet-Draft                    CBOR                     February 2018
 
@@ -3245,4 +3301,4 @@ Internet-Draft                    CBOR                     February 2018
 
 
 
-Bormann & Hoffman        Expires August 26, 2018               [Page 58]
+Bormann & Hoffman        Expires August 26, 2018               [Page 59]

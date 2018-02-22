@@ -1637,12 +1637,12 @@ Internet-Draft                    CBOR                     February 2018
    (Section 4.10).
 
    The CBOR data model for maps does not allow ascribing semantics to
-   the order of the key/value pairs in the map representation.
-   Thus, it would be a very bad practice to define a CBOR-based protocol
-   in such a way that changing the key/value pair order in a map would
-   change the semantics, apart from trivial aspects (cache usage, etc.).
-   (A CBOR-based protocol can prescribe a specific order of
-   serialization, such as for canonicalization.)
+   the order of the key/value pairs in the map representation.  Thus, it
+   would be a very bad practice to define a CBOR-based protocol in such
+   a way that changing the key/value pair order in a map would change
+   the semantics, apart from trivial aspects (cache usage, etc.).  (A
+   CBOR-based protocol can prescribe a specific order of serialization,
+   such as for canonicalization.)
 
    Applications for constrained devices that have maps with 24 or fewer
    frequently used keys should consider using small integers (and those
@@ -2320,9 +2320,8 @@ Internet-Draft                    CBOR                     February 2018
 
    o  Point of contact
 
-   o  Description of semantics (URL)
-      This description is optional; the URL can point to something like
-      an Internet-Draft or a web page.
+   o  Description of semantics (URL) - This description is optional; the
+      URL can point to something like an Internet-Draft or a web page.
 
 8.3.  Media Type ("MIME Type")
 
@@ -2346,6 +2345,7 @@ Internet-Draft                    CBOR                     February 2018
 
    Applications that use this media type:  None yet, but it is expected
       that this format will be deployed in protocols and applications.
+
 
 
 

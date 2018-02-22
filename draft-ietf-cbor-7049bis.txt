@@ -122,22 +122,22 @@ Internet-Draft                    CBOR                     February 2018
      4.9.  Canonical CBOR  . . . . . . . . . . . . . . . . . . . . .  31
        4.9.1.  Length-first map key ordering . . . . . . . . . . . .  33
      4.10. Strict Mode . . . . . . . . . . . . . . . . . . . . . . .  34
-   5.  Converting Data between CBOR and JSON . . . . . . . . . . . .  35
-     5.1.  Converting from CBOR to JSON  . . . . . . . . . . . . . .  35
+   5.  Converting Data between CBOR and JSON . . . . . . . . . . . .  36
+     5.1.  Converting from CBOR to JSON  . . . . . . . . . . . . . .  36
      5.2.  Converting from JSON to CBOR  . . . . . . . . . . . . . .  37
-   6.  Future Evolution of CBOR  . . . . . . . . . . . . . . . . . .  37
+   6.  Future Evolution of CBOR  . . . . . . . . . . . . . . . . . .  38
      6.1.  Extension Points  . . . . . . . . . . . . . . . . . . . .  38
      6.2.  Curating the Additional Information Space . . . . . . . .  39
-   7.  Diagnostic Notation . . . . . . . . . . . . . . . . . . . . .  39
-     7.1.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  40
+   7.  Diagnostic Notation . . . . . . . . . . . . . . . . . . . . .  40
+     7.1.  Encoding Indicators . . . . . . . . . . . . . . . . . . .  41
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  41
      8.1.  Simple Values Registry  . . . . . . . . . . . . . . . . .  41
-     8.2.  Tags Registry . . . . . . . . . . . . . . . . . . . . . .  41
+     8.2.  Tags Registry . . . . . . . . . . . . . . . . . . . . . .  42
      8.3.  Media Type ("MIME Type")  . . . . . . . . . . . . . . . .  42
-     8.4.  CoAP Content-Format . . . . . . . . . . . . . . . . . . .  42
+     8.4.  CoAP Content-Format . . . . . . . . . . . . . . . . . . .  43
      8.5.  The +cbor Structured Syntax Suffix Registration . . . . .  43
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  44
-   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  44
+   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  45
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  45
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  45
      11.2.  Informative References . . . . . . . . . . . . . . . . .  46
@@ -1768,6 +1768,35 @@ Internet-Draft                    CBOR                     February 2018
    o  Indefinite-length items MUST not appear.  They can be encoded as
       definite-length items instead.
 
+   If a protocol allows for IEEE floats, then additional
+   canonicalization rules might need to be added.  One example rule
+   might be to have all floats start as a 64-bit float, then do a test
+   conversion to a 32-bit float; if the result is the same numeric
+   value, use the shorter value and repeat the process with a test
+   conversion to a 16-bit float.  (This rule selects 16-bit float for
+   positive and negative Infinity as well.)  Also, there are many
+   representations for NaN.  If NaN is an allowed value, it must always
+   be represented as 0xf97e00.
+
+   CBOR tags present additional considerations for canonicalization.
+   The absence or presence of tags in a canonical format is determined
+   by the optionality of the tags in the protocol.  In a CBOR-based
+   protocol that allows optional tagging anywhere, the canonical format
+   must not allow them.  In a protocol that requires tags in certain
+   places, the tag needs to appear in the canonical format.  A CBOR-
+   based protocol that uses canonicalization might instead say that all
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 32]
+
+Internet-Draft                    CBOR                     February 2018
+
+
+   tags that appear in a message must be retained regardless of whether
+   they are optional.
+
    Protocols that include floating, big integer, or other complex values
    need to define extra requirements on their canonical encodings.  For
    example:
@@ -1786,13 +1815,6 @@ Internet-Draft                    CBOR                     February 2018
       2.  Encode all values as the smallest of 16-, 32-, or 64-bit
           floating point that accurately represents the value, even for
           integral values, or
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 32]
-
-Internet-Draft                    CBOR                     February 2018
-
 
       3.  Encode all values as 64-bit floating point.
 
@@ -1817,6 +1839,16 @@ Internet-Draft                    CBOR                     February 2018
    compatible with [RFC7049]'s order can instead be specified in terms
    of this specification's "length-first core canonicalization
    requirements":
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 33]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    A CBOR encoding satisfies the "length-first core canonicalization
    requirements" if it satisfies the core canonicalization requirements
@@ -1843,13 +1875,6 @@ Internet-Draft                    CBOR                     February 2018
 
    6.  [-1], encoded as 0x8120.
 
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 33]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    7.  "aa", encoded as 0x626161.
 
    8.  [100], encoded as 0x811864.
@@ -1873,6 +1898,13 @@ Internet-Draft                    CBOR                     February 2018
    of the receiver to reject ambiguously decodable data.  It is expected
    that firewalls and other security systems that decode CBOR will only
    decode in strict mode.
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 34]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    A decoder in strict mode will reliably reject any data that could be
    interpreted by other decoders in different ways.  It will reliably
@@ -1898,14 +1930,6 @@ Internet-Draft                    CBOR                     February 2018
 
    o  It can emit the unknown item (type, value, and, for tags, the
       decoded tagged data item) to the application calling the decoder
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 34]
-
-Internet-Draft                    CBOR                     February 2018
-
-
       with an indication that the decoder did not recognize that tag or
       simple value.
 
@@ -1925,6 +1949,18 @@ Internet-Draft                    CBOR                     February 2018
    encoder also may want to provide a strict mode where it reliably
    limits its output to unambiguously decodable CBOR, independent of
    whether or not its application is providing API-conformant data.
+
+
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 35]
+
+Internet-Draft                    CBOR                     February 2018
+
 
 5.  Converting Data between CBOR and JSON
 
@@ -1953,15 +1989,6 @@ Internet-Draft                    CBOR                     February 2018
    o  A UTF-8 string (major type 3) becomes a JSON string.  Note that
       JSON requires escaping certain characters (RFC 7159, Section 7):
       quotation mark (U+0022), reverse solidus (U+005C), and the "C0
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 35]
-
-Internet-Draft                    CBOR                     February 2018
-
-
       control characters" (U+0000 through U+001F).  All other characters
       are copied unchanged into the JSON UTF-8 string.
 
@@ -1981,6 +2008,15 @@ Internet-Draft                    CBOR                     February 2018
 
    o  Null (major type 7, additional information 22) becomes a JSON
       null.
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 36]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    o  A floating-point value (major type 7, additional information 25
       through 27) becomes a JSON number if it is finite (that is, it can
@@ -2007,17 +2043,6 @@ Internet-Draft                    CBOR                     February 2018
 
    o  Indefinite-length items are made definite before conversion.
 
-
-
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 36]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 5.2.  Converting from JSON to CBOR
 
    All JSON values, once decoded, directly map into one or more CBOR
@@ -2041,6 +2066,14 @@ Internet-Draft                    CBOR                     February 2018
       capable of efficiently finding the minimum form, though).  There
       may be an implementation-defined limit to the precision that will
       affect the precision of the represented values.  Decimal
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 37]
+
+Internet-Draft                    CBOR                     February 2018
+
+
       representation should only be used if that is specified in a
       protocol.
 
@@ -2066,14 +2099,6 @@ Internet-Draft                    CBOR                     February 2018
 
    For protocols that will use CBOR, CBOR provides some useful
    mechanisms to facilitate their evolution.  Best practices for this
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 37]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    are well known, particularly from JSON format development of JSON-
    based protocols.  Therefore, such best practices are outside the
    scope of this specification.
@@ -2097,6 +2122,14 @@ Internet-Draft                    CBOR                     February 2018
 
    Sizing the codepoint space may be difficult because the range
    required may be hard to predict.  An attempt should be made to make
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 38]
+
+Internet-Draft                    CBOR                     February 2018
+
+
    the codepoint space large enough so that it can slowly be filled over
    the intended lifetime of the protocol.
 
@@ -2121,15 +2154,6 @@ Internet-Draft                    CBOR                     February 2018
 
    o  the "additional information" space.  An implementation receiving
       an unknown additional information value has no way to continue
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 38]
-
-Internet-Draft                    CBOR                     February 2018
-
-
       parsing, so allocating codepoints to this space is a major step.
       There are also very few codepoints left.
 
@@ -2152,6 +2176,15 @@ Internet-Draft                    CBOR                     February 2018
    additional information value available for general allocation, and
    there should be a very good reason for allocating it before assigning
    it through an update of this protocol.
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 39]
+
+Internet-Draft                    CBOR                     February 2018
+
 
 7.  Diagnostic Notation
 
@@ -2178,14 +2211,6 @@ Internet-Draft                    CBOR                     February 2018
    JavaScript.  The non-finite floating-point numbers Infinity,
    -Infinity, and NaN are written exactly as in this sentence (this is
    also a way they can be written in JavaScript, although JSON does not
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 39]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    allow them).  A tagged item is written as an integer number for the
    tag followed by the item in parentheses; for instance, an RFC 3339
    (ISO 8601) date could be notated as:
@@ -2206,6 +2231,16 @@ Internet-Draft                    CBOR                     February 2018
    Unassigned simple values are given as "simple()" with the appropriate
    integer in the parentheses.  For example, "simple(42)" indicates
    major type 7, value 42.
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 40]
+
+Internet-Draft                    CBOR                     February 2018
+
 
 7.1.  Encoding Indicators
 
@@ -2235,13 +2270,6 @@ Internet-Draft                    CBOR                     February 2018
    encoding indicator "_" is thus an abbreviation of the full form "_7",
    which is not used.)
 
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 40]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    As a special case, byte and text strings of indefinite length can be
    notated in the form (_ h'0123', h'4567') and (_ "foo", "bar").
 
@@ -2262,6 +2290,13 @@ Internet-Draft                    CBOR                     February 2018
    It is suggested that these Standards Actions allocate values starting
    with the number 16 in order to reserve the lower numbers for
    contiguous blocks (if any).
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 41]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    New entries in the range 32 to 255 are assigned by Specification
    Required.
@@ -2289,15 +2324,6 @@ Internet-Draft                    CBOR                     February 2018
       This description is optional; the URL can point to something like
       an Internet-Draft or a web page.
 
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 41]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 8.3.  Media Type ("MIME Type")
 
    The Internet media type [RFC6838] for CBOR data is application/cbor.
@@ -2320,6 +2346,13 @@ Internet-Draft                    CBOR                     February 2018
 
    Applications that use this media type:  None yet, but it is expected
       that this format will be deployed in protocols and applications.
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 42]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    Additional information:
      Magic number(s): n/a
@@ -2346,14 +2379,6 @@ Internet-Draft                    CBOR                     February 2018
 
    Encoding: -
 
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 42]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    Id: 60
 
    Reference: [RFCthis]
@@ -2369,6 +2394,21 @@ Internet-Draft                    CBOR                     February 2018
    Encoding Considerations: CBOR is a binary format.
 
    Interoperability Considerations: n/a
+
+
+
+
+
+
+
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 43]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    Fragment Identifier Considerations:
      The syntax and semantics of fragment identifiers specified for
@@ -2398,18 +2438,6 @@ Internet-Draft                    CBOR                     February 2018
      The Apps Area Working Group.
      The IESG has change control over this registration.
 
-
-
-
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 43]
-
-Internet-Draft                    CBOR                     February 2018
-
-
 9.  Security Considerations
 
    A network-facing application can exhibit vulnerabilities in its
@@ -2430,6 +2458,14 @@ Internet-Draft                    CBOR                     February 2018
    Applications where a CBOR data item is examined by a gatekeeper
    function and later used by a different application may exhibit
    vulnerabilities when multiple interpretations of the data item are
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 44]
+
+Internet-Draft                    CBOR                     February 2018
+
+
    possible.  For example, an attacker could make use of duplicate keys
    in maps and precision issues in numbers to make the gatekeeper base
    its decisions on a different interpretation than the one that will be
@@ -2459,13 +2495,6 @@ Internet-Draft                    CBOR                     February 2018
    The encoding of the additional information in CBOR was inspired by
    the encoding of length information designed by Klaus Hartke for CoAP.
 
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 44]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    This document also incorporates suggestions made by many people,
    notably Dan Frost, James Manger, Joe Hildebrand, Keith Moore, Matthew
    Lepinski, Nico Williams, Phillip Hallam-Baker, Ray Polk, Tim Bray,
@@ -2485,6 +2514,13 @@ Internet-Draft                    CBOR                     February 2018
               Extensions (MIME) Part One: Format of Internet Message
               Bodies", RFC 2045, DOI 10.17487/RFC2045, November 1996,
               <https://www.rfc-editor.org/info/rfc2045>.
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 45]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2512,16 +2548,6 @@ Internet-Draft                    CBOR                     February 2018
               Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
               <https://www.rfc-editor.org/info/rfc4648>.
 
-
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 45]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
               IANA Considerations Section in RFCs", RFC 5226,
               DOI 10.17487/RFC5226, May 2008,
@@ -2543,6 +2569,14 @@ Internet-Draft                    CBOR                     February 2018
 
    [BSON]     Various, "BSON - Binary JSON", 2013,
               <http://bsonspec.org/>.
+
+
+
+
+Bormann & Hoffman        Expires August 26, 2018               [Page 46]
+
+Internet-Draft                    CBOR                     February 2018
+
 
    [MessagePack]
               Furuhashi, S., "MessagePack", 2013, <http://msgpack.org/>.
@@ -2569,46 +2603,12 @@ Internet-Draft                    CBOR                     February 2018
               DOI 10.17487/RFC7228, May 2014,
               <https://www.rfc-editor.org/info/rfc7228>.
 
-
-
-
-
-Bormann & Hoffman        Expires August 26, 2018               [Page 46]
-
-Internet-Draft                    CBOR                     February 2018
-
-
    [UBJSON]   The Buzz Media, "Universal Binary JSON Specification",
               2013, <http://ubjson.org/>.
 
    [YAML]     Ben-Kiki, O., Evans, C., and I. Net, "YAML Ain't Markup
               Language (YAML[TM]) Version 1.2", 3rd Edition, October
               2009, <http://www.yaml.org/spec/1.2/spec.html>.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
